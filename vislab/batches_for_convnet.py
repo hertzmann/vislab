@@ -6,7 +6,6 @@ import random
 import string
 import os
 import requests
-import aphrodite
 import vislab
 import cPickle
 import numpy as np
@@ -15,12 +14,12 @@ import skimage.io
 
 
 queue_name = 'finetune_convnet'
-IMAGES_DIRNAME = vislab.util.makedirs(aphrodite.REPO_DIRNAME + '/data/images')
 num_images = 1024
 
 
 def process_image(image_id, image_url):
-    filename = IMAGES_DIRNAME + '/{}.jpg'.format(image_id)
+    filename = '{}/{}.jpg'.format(
+        vislab.util.makedirs(vislab.config['paths']['images']), image_id)
     try:
         if not os.path.exists(filename):
             print("Downloading image for id: {}".format(image_id))
@@ -59,7 +58,7 @@ if __name__ == '__main__':
     # Process images until all have been processed.
     data = []
     labels = []
-    redis_conn = vislab.util.get_redis_conn()
+    redis_conn = vislab.util.get_redis_client()
     msg = redis_conn.blpop(queue_name, timeout=5)
     while msg is not None:
         # If we don't have 1024 examples, load another image.

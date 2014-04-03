@@ -1,15 +1,31 @@
 {
     "paths": {
-        "VOC": "~/work/vision_data/VOC2012",
+        "behance_style_repo": "~/work/behance_style",
+        "VOC2012": "~/work/vision_data/VOC2012",
+        "VOC2007": "~/work/vision_data/VOC2007",
+        "ILSVRC2013": "~/work/vision_data/ILSVRC2013",
+        "INRIAPerson": "~/work/vision_data/INRIAPerson",
         "AVA": "~/work/vision_data/AVA_dataset",
-        "data": "~/work/vislab/data",
-        "shared_data": "~/work/vislab/data/shared",
-        "static_data": "~/work/vislab/data/static",
-        "feats": "~/work/aphrodite/data/feats",
-        "predict": "~/work/vislab/data/predict",
-        "results": "~/work/vislab/data/results"
-    },
+        "data": "~/work/vislab-git/data",
+        "images": "~/work/vislab-git/data/images",
+        "shared_data": "~/work/vislab-git/data/shared",
+        "static_data": "~/work/vislab-git/data/static",
+        "feats": "~/work/vislab-git/data/feats",
+        "predict_stable": "~/work/vislab-git/data/predict_stable",
+        "predict_temp": "~/work/vislab-git/data/predict_temp",
+        "results": "~/work/vislab-git/data/results",
+        "caffe": "~/work/caffe-bvlc",
+        "vlg_extractor": "~/work/vlg_extractor_v1.1.0"
 
-    "behanceAPIkey": "PUT_API_KEY_HERE"
+    },
+    "api_keys": {
+        "flickr": "",
+        "behance": ""
+    },
+    "servers": {
+        "mongo": ["0.0.0.0", 27017],
+        "redis": ["0.0.0.0", 6379],
+        "redis_exclude": "orange6"
+    }
 }
 

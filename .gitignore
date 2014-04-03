@@ -1,4 +1,8 @@
 data
 .ipynb*
+*.pyc
+
 vislab/tests/_temp
 vislab/config.json
+
+docs/_site

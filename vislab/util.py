@@ -7,6 +7,11 @@ import tempfile
 import cPickle
 import subprocess
 import shutil
+import vislab
+
+
+def zero_results(collection, query):
+    return collection.find(query).limit(1).count() == 0
 
 
 def exclude_ids_in_collection(image_ids, collection):
@@ -23,10 +28,13 @@ def exclude_ids_in_collection(image_ids, collection):
         num_ids - len(image_ids), num_ids))
     return image_ids
 
-# Gather data by calling generator_fn into "filename", if it doesn't already exist.
-# If it does exist, just reload it from the file.
-# Use force=True to force regenerating the data.
+
 def load_or_generate_df(filename, generator_fn, force=False, args=None):
+    """
+    If filename does not already exist, gather data with generator_fn,
+    and write to filename.
+    If filename does exist, load from it.
+    """
     if not force and os.path.exists(filename):
         df = pd.read_hdf(filename, 'df')
     else:
@@ -47,12 +55,12 @@ def get_mongodb_client():
     Establish connection to MongoDB.
     """
     try:
-        host = 'flapjack' if running_on_icsi() else 'localhost'
-        connection = pymongo.MongoClient(host, 27666)
-        return connection
+        host, port = vislab.config['servers']['mongo']
+        connection = pymongo.MongoClient(host, port)
     except pymongo.errors.ConnectionFailure:
         raise Exception(
-            "Need a MongoDB server running on {}, port 27666".format(host))
+            "Need a MongoDB server running on {}, port {}".format(host, port))
+    return connection
 
 
 def print_collection_counts():
@@ -66,10 +74,15 @@ def print_collection_counts():
                 db_name, coll_name, client[db_name][coll_name].count()))
 
 
-def get_redis_conn():
-    host = 'flapjack' if running_on_icsi() else 'localhost'
-    redis_conn = redis.Redis(host)
-    return redis_conn
+def get_redis_client():
+    host, port = vislab.config['servers']['redis']
+    try:
+        connection = redis.Redis(host, port)
+        connection.ping()
+    except redis.ConnectionError:
+        raise Exception(
+            "Need a Redis server running on {}, port {}".format(host, port))
+    return connection
 
 
 def pickle_function_call(func_name, args):
